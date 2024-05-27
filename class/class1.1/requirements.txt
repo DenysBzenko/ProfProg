@@ -1,0 +1,1 @@
+I am a lazy person.  And I don't want to calculate the discriminant every time. So I will write a program that will calculate everything for me. I will just enter the data a and b, and it will knock out the roots of the discriminant for me.
