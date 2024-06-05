@@ -54,4 +54,8 @@ public class User {
             System.out.println("Hello again(x" + stats.get(name) + "), " + name + "!");
         }
     }
+
+    public Map<String, Integer> getStats() {
+        return stats;
+    }
 }
