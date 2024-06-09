@@ -21,7 +21,6 @@ public class MainTest {
     public void setUp() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        // Clean up before each test
         File file = new File(testFilename);
         if (file.exists()) {
             file.delete();
