@@ -11,38 +11,40 @@ public class MusicPlayer {
     private static final Map<State, Map<String, State>> transitions = new HashMap<>();
 
     static {
-        // Transitions from INTRO
+        
         Map<String, State> introTransitions = new HashMap<>();
         introTransitions.put("dangerous", State.LET_IT_BE);
         introTransitions.put("fun", State.STARMAN);
         introTransitions.put("sad", State.IN_THE_END);
         transitions.put(State.INTRO, introTransitions);
 
-        // Transitions from STARMAN
+        
         Map<String, State> starmanTransitions = new HashMap<>();
         starmanTransitions.put("silly", State.INTRO);
         starmanTransitions.put("dangerous", State.SHOW_MUST_GO_ON);
         starmanTransitions.put("fun", State.IN_THE_END);
         transitions.put(State.STARMAN, starmanTransitions);
 
-        // Transitions from SHOW_MUST_GO_ON
+        
         Map<String, State> showMustGoOnTransitions = new HashMap<>();
         showMustGoOnTransitions.put("sad", State.LET_IT_BE);
         showMustGoOnTransitions.put("fun", State.STARMAN);
         transitions.put(State.SHOW_MUST_GO_ON, showMustGoOnTransitions);
 
-        // Transitions from LET_IT_BE
+        
         Map<String, State> letItBeTransitions = new HashMap<>();
         letItBeTransitions.put("dangerous", State.INTRO);
         letItBeTransitions.put("silly", State.SHOW_MUST_GO_ON);
         transitions.put(State.LET_IT_BE, letItBeTransitions);
     }
 
+    
     private State currentState;
 
     public MusicPlayer() {
         this.currentState = State.INTRO;
     }
+
 
     public void handleCommand(String command) {
         if (currentState == State.IN_THE_END) {
@@ -74,6 +76,7 @@ public class MusicPlayer {
                 break;
         }
     }
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
