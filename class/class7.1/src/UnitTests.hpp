@@ -6,47 +6,20 @@
 #include <iostream>
 #include <stdexcept>
 #include <source_location>
-
-
-class Rectangle {
-public:
-    Rectangle(double width, double height);
-    double getWidth() const;
-    double getHeight() const;
-    double getArea() const;
-    bool canFitInside(const Rectangle& other) const;
-
-private:
-    double width_;
-    double height_;
-    double area_;
-};
-
-class RectangleProcessor {
-public:
-    void addRectangle(double width, double height);
-    const Rectangle& getBiggestAreaRectangle() const;
-    const Rectangle& getSmallestAreaRectangle() const;
-    void compareRectangles(size_t index1, size_t index2) const;
-
-private:
-    void updateBiggestAndSmallestArea(double area);
-    std::vector<Rectangle> rectangles_;
-    double biggestArea_ = 0;
-    double smallestArea_ = 1000000;
-};
+#include "Rectangle.hpp"
+#include "RectangleProcessor.hpp"
 
 #define ASSERT_EQ(leftValue, rightValue) \
-    if ( leftValue != rightValue ) { \
+    if (leftValue != rightValue) { \
         auto location = std::source_location::current(); \
-        std::cerr << "Assert failed: " << #leftValue << " (which is equal to " << leftValue << ") is not equal to " << #rightValue << " at " << location.file_name() << ":" << location.line() << std::endl; \
+        std::println("Assert failed: {} (which is equal to {}) is not equal to {} at {}:{}", #leftValue, leftValue, #rightValue, location.file_name(), location.line()); \
         throw std::invalid_argument("Assertion failed"); \
     }
 
 #define ASSERT_NEQ(leftValue, rightValue) \
-    if ( leftValue == rightValue ) { \
+    if (leftValue == rightValue) { \
         auto location = std::source_location::current(); \
-        std::cerr << "Assert failed: " << #leftValue << " is equal to " << #rightValue << " at " << location.file_name() << ":" << location.line() << std::endl; \
+        std::println("Assert failed: {} is equal to {} at {}:{}", #leftValue, #rightValue, location.file_name(), location.line()); \
         throw std::invalid_argument("Assertion failed"); \
     }
 
@@ -68,18 +41,18 @@ public:
 
         for (auto& [name, testFunc] : tests) {
             if (testFunc) {
-                std::cout << "Executing test " << name << "..." << std::endl;
+                std::println("Executing test {}...", name);
                 totalCount++;
                 try {
                     testFunc();
-                    std::cout << name << " " << greenColor << "PASSED" << endColor << "." << std::endl;
+                    std::println("{} {}PASSED{}.", name, greenColor, endColor);
                     successCount++;
                 } catch (std::exception& e) {
-                    std::cout << name << " " << redColor << "FAILED" << endColor << "." << std::endl;
+                    std::println("{} {}FAILED{}.", name, redColor, endColor);
                 }
             }
         }
-        std::cout << successCount << " of " << totalCount << " " << (totalCount == 1 ? "test" : "tests") << " have passed" << std::endl;
+        std::println("{} of {} {} have passed", successCount, totalCount, (totalCount == 1 ? "test" : "tests"));
     }
 
 private:
