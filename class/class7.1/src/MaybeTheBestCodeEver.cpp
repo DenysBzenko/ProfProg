@@ -1,24 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
-class Rectangle {
-public:
-    Rectangle(double width, double height) : width_(width), height_(height), area_(width * height) {}
-
-    double getWidth() const { return width_; }
-    double getHeight() const { return height_; }
-    double getArea() const { return area_; }
-
-    bool canFitInside(const Rectangle& other) const {
-        return width_ <= other.getWidth() && height_ <= other.getHeight();
-    }
-
-private:
-    double width_;
-    double height_;
-    double area_;
-};
+#include <limits>
+#include "Rectangle.hpp"
 
 class RectangleProcessor {
 public:
@@ -28,12 +12,18 @@ public:
     }
 
     const Rectangle& getBiggestAreaRectangle() const {
+        if (rectangles_.empty()) {
+            throw std::runtime_error("No rectangles available.");
+        }
         return *std::max_element(rectangles_.begin(), rectangles_.end(), [](const Rectangle& a, const Rectangle& b) {
             return a.getArea() < b.getArea();
         });
     }
 
     const Rectangle& getSmallestAreaRectangle() const {
+        if (rectangles_.empty()) {
+            throw std::runtime_error("No rectangles available.");
+        }
         return *std::min_element(rectangles_.begin(), rectangles_.end(), [](const Rectangle& a, const Rectangle& b) {
             return a.getArea() < b.getArea();
         });
@@ -42,9 +32,9 @@ public:
     void compareRectangles(size_t index1, size_t index2) const {
         if (index1 < rectangles_.size() && index2 < rectangles_.size()) {
             if (rectangles_[index1].canFitInside(rectangles_[index2])) {
-                std::cout << "Rectangle " << index1 + 1 << " can be placed inside Rectangle " << index2 + 1 << std::endl;
+                std::println("Rectangle {} can be placed inside Rectangle {}", index1 + 1, index2 + 1);
             } else {
-                std::cout << "Rectangle " << index1 + 1 << " cannot be placed inside Rectangle " << index2 + 1 << std::endl;
+                std::println("Rectangle {} cannot be placed inside Rectangle {}", index1 + 1, index2 + 1);
             }
         }
     }
@@ -60,23 +50,25 @@ private:
     }
 
     std::vector<Rectangle> rectangles_;
-    double biggestArea_ = 0;
-    double smallestArea_ = 1000000;
+    double biggestArea_ = std::numeric_limits<double>::lowest();
+    double smallestArea_ = std::numeric_limits<double>::max();
 };
+
+constexpr size_t NUM_RECTANGLES = 5;
 
 int main() {
     RectangleProcessor processor;
 
-    for (int i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < NUM_RECTANGLES; ++i) {
         double width, height;
-        std::cout << "Enter rectangle " << i + 1 << ":" << std::endl;
+        std::println("Enter rectangle {}:", i + 1);
         if (std::cin >> width >> height) {
             processor.addRectangle(width, height);
         }
     }
 
-    for (size_t i = 0; i < 5; ++i) {
-        for (size_t j = i + 1; j < 5; ++j) {
+    for (size_t i = 0; i < NUM_RECTANGLES; ++i) {
+        for (size_t j = i + 1; j < NUM_RECTANGLES; ++j) {
             processor.compareRectangles(i, j);
         }
     }
