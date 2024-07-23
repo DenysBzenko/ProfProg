@@ -39,14 +39,25 @@ public class MyDataType {
     }
 
     private static void serializeInt(int value, OutputStream out) throws IOException {
-        out.write(0xd1);  
-        out.write((value >> 8) & 0xFF);
-        out.write(value & 0xFF);
+        if (value >= -128 && value <= 127) {
+            out.write(0xd0);  
+            out.write(value & 0xFF);
+        } else {
+            out.write(0xd1);  
+            out.write((value >> 8) & 0xFF);
+            out.write(value & 0xFF);
+        }
     }
 
     private static void serializeString(String value, OutputStream out) throws IOException {
-        out.write(0xd9); 
-        out.write(value.length());
+        if (value.length() <= 31) {
+            out.write(0xd9);  
+            out.write(value.length());
+        } else {
+            out.write(0xda);  
+            out.write((value.length() >> 8) & 0xFF);
+            out.write(value.length() & 0xFF);
+        }
         out.write(value.getBytes());
     }
 
